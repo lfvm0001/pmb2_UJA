@@ -1,0 +1,22 @@
+<launch>
+
+  <arg name="rvizconfig" default="robot_localization" />
+  <arg name="map_method" default="karto" />
+  <arg name="rviz" default="true"/>
+  
+  <param name="use_sim_time" value="false" />  
+  
+  <arg name="map_file" default="$(find pmb2_lab_nav)/maps/lab_$(arg map_method).yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+  
+
+  <group if="$(arg rviz)">
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find pmb2_lab_nav)/rviz/$(arg rvizconfig).rviz" />
+  </group>
+  
+  <node pkg="amcl" type="amcl" name="amcl">
+	<param name="use_map_topic" value="true"/>
+	<rosparam file="$(find pmb2_lab_nav)/config/localization/amcl.yaml" command="load"/>
+  </node>
+    
+</launch>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="scan_topic"  default="/scan" />
+  
+  <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" output="screen">
+    <remap from="scan" to="$(arg scan_topic)"/>
+	<rosparam file="$(find pmb2_lab_nav)/config/mapping/hector.yaml" command="load"/>
+  </node>
+
+  <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch">
+    <arg name="trajectory_source_frame_name" value="scanmatcher_frame"/>
+  </include>
+
+</launch>
