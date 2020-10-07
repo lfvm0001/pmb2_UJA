@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /LaserScan1
       Splitter Ratio: 0.5
     Tree Height: 416
   - Class: rviz/Selection
@@ -70,14 +71,14 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
+        Max Value: 0.09449999779462814
+        Min Value: 0.09449999779462814
         Value: true
       Axis: Z
       Channel Name: intensity
       Class: rviz/LaserScan
       Color: 255; 255; 255
-      Color Transformer: Intensity
+      Color Transformer: AxisColor
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
@@ -90,7 +91,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.05000000074505806
+      Size (m): 0.10000000149011612
       Style: Flat Squares
       Topic: /scan
       Unreliable: false
@@ -142,7 +143,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 14.855552673339844
+      Distance: 40.4925651550293
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -160,7 +161,7 @@ Visualization Manager:
       Pitch: 1.2003976106643677
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.5453980565071106
+      Yaw: 0.5403980612754822
     Saved: ~
 Window Geometry:
   Displays:
