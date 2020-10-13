@@ -51,3 +51,4 @@ global_frame_id : map
 # Initial pose:
 save_pose_rate: -1.0 # disabled (< 0.0)
 
+use_map_topic : true
