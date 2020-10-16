@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="rvizconfig" default="robot_localization" />
+  <arg name="rvizconfig" default="robot_navigation" />
   <arg name="map_method" default="gmapping" />
   <arg name="rviz" default="true"/>
     

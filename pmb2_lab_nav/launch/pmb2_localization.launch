@@ -15,7 +15,7 @@
   </group>
   
   <node pkg="amcl" type="amcl" name="amcl" machine="pmb2-5c">
-	<rosparam file="$(find pmb2_lab_nav)/config/localization/amcl3.yaml" command="load"/>
+	<rosparam file="$(find pmb2_lab_nav)/config/localization/amcl2.yaml" command="load"/>
   </node>
     
 </launch>
