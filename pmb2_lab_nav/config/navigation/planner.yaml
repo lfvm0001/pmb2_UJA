@@ -1,5 +1,15 @@
-controller_frequency: 5.0
+planner_frequency: 1.0
+planner_patience: 2.0
+
+controller_frequency: 10.0
+controller_patience: 3.0
+
+oscillation_timeout: 10.0
+oscillation_distance: 0.2
+
 recovery_behaviour_enabled: true
+shutdown_costmaps: false
+
 
 NavfnROS:
   allow_unknown: false 
@@ -10,6 +20,7 @@ GlobalPlanner:
   allow_unknown: false
   default_tolerance: 0.5
   visualize_potential: true
+  
   use_dijkstra: false
   use_quadratic: true
   use_grid_path: false
@@ -22,7 +33,7 @@ DWAPlannerROS:
 
   acc_lim_x: 0.8
   acc_lim_y: 0.0
-  acc_lim_th: 1.5
+  acc_lim_th: !degrees 96.0
   
   max_vel_trans: 1.0
   min_vel_trans: 0.1
@@ -33,17 +44,20 @@ DWAPlannerROS:
   max_vel_y: 0.0
   min_vel_y: 0.0
 
-  max_rot_vel: 2.0
+  max_rot_vel: !degrees 36.0
   min_rot_vel: 0.4
   
-  sim_time: 3
+  yaw_goal_tolerance: 0.15
+  xy_goal_tolerance : 0.10
+  
+  sim_time: 1
   sim_granularity: 0.025
 
   scaling_speed: 1.0
   
-  vx_samples: 20
+  vx_samples: 10
   vy_samples: 0
-  vtheta_samples: 40
+  vtheta_samples: 20
   
   meter_scoring: true
   publish_cost_grid: true
@@ -52,10 +66,10 @@ TebLocalPlannerROS:
 
   max_vel_x: 1.0
   max_vel_x_backwards: 0.1
-  max_vel_theta: 2.0
+  max_vel_theta: !degrees 36.0
   
   acc_lim_x: 0.8
-  acc_lim_theta: 1.5
+  acc_lim_theta: !degrees 96.0
   
   min_samples: 5
 
