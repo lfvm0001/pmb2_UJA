@@ -3,9 +3,6 @@
   <arg name="rvizconfig" default="robot_navigation" />
   <arg name="map_method" default="gmapping" />
   <arg name="rviz" default="true"/>
-    
-  <arg name="base_global_planner" default="navfn/NavfnROS"/>
-  <arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
   
   <include file="$(find pmb2_lab_nav)/launch/pmb2_localization.launch">
     <arg name="rvizconfig" value="$(arg rvizconfig)"/>
@@ -13,9 +10,6 @@
 	<arg name="rviz" value="$(arg rviz)"/>
   </include>
   
-  <include file="$(find pmb2_lab_nav)/launch/pmb2_navigation.launch">
-    <arg name="base_global_planner" value="$(arg base_global_planner)"/>
-	<arg name="base_local_planner" value="$(arg base_local_planner)"/>
-  </include>
+  <include file="$(find pmb2_lab_nav)/launch/pmb2_navigation.launch"/>
     
 </launch>
