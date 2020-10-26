@@ -8,7 +8,7 @@
   <machine name="pmb2-5c" address="10.68.0.1" user="root" env-loader="/opt/pal/cobalt/env.sh" />
 
 
-  <node machine="pmb2-5c" name="map_server" pkg="map_server" type="map_server" args="/opt/pal/cobalt/share/pmb2_UJA/pmb2_lab_nav/maps/lab_$(arg map_method).yaml" />
+  <node machine="pmb2-5c" name="map_server" pkg="map_server" type="map_server" args="/opt/pal/cobalt/share/pmb2_UJA/pmb2_lab_nav/maps/lab1_$(arg map_method).yaml" />
   
   <group if="$(arg rviz)">
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find pmb2_lab_nav)/rviz/$(arg rvizconfig).rviz" />
