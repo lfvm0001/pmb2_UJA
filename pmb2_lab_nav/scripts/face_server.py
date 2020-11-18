@@ -5,7 +5,7 @@ import glob
 import rospy
 import pygame
 from pathlib import Path
-from robot_test.srv import face_action, face_actionResponse
+from pmb2_lab_nav.srv import face_action, face_actionResponse
 
 global my_group
 
