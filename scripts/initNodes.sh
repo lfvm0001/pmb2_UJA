@@ -1,21 +1,21 @@
 #!/bin/bash
 
-rosnode kill /amcl 
-rosnode kiil /compressed_map_publisher
-rosnode kiil /joystick_relay
-rosnode kiil /map_configuration_server
-rosnode kiil /map_server
-rosnode kiil /map_setup
-rosnode kiil /joystick
-rosnode kiil /pal_computer_monitor_node
-rosnode kiil /pal_navigation_sm
-rosnode kiil /pal_topic_monitor_node
-rosnode kiil /move_base
-rosnode kiil /pal_vo_server
-rosnode kiil /mm11_prod
-rosnode kiil /embedded_networking_supervisor
-rosnode kiil /joy_teleop
-rosnode kiil /pose_saver
-rosnode kiil /pal_diagnostic_aggregator 
-rosnode kiil /pal_supervisor_node
-rosnode kiil /pal_webcommander_node
+rosnode kill /amcl &> /dev/null
+rosnode kiil /compressed_map_publisher &> /dev/null
+rosnode kiil /joystick_relay &> /dev/null
+rosnode kiil /map_configuration_server &> /dev/null
+rosnode kiil /map_server &> /dev/null
+rosnode kiil /map_setup &> /dev/null
+rosnode kiil /joystick &> /dev/null
+rosnode kiil /pal_computer_monitor_node &> /dev/null
+rosnode kiil /pal_navigation_sm &> /dev/null
+rosnode kiil /pal_topic_monitor_node &> /dev/null
+rosnode kiil /move_base &> /dev/null
+rosnode kiil /pal_vo_server &> /dev/null
+rosnode kiil /mm11_prod &> /dev/null
+rosnode kiil /embedded_networking_supervisor &> /dev/null
+rosnode kiil /joy_teleop &> /dev/null
+rosnode kiil /pose_saver &> /dev/null
+rosnode kiil /pal_diagnostic_aggregator &> /dev/null 
+rosnode kiil /pal_supervisor_node &> /dev/null
+rosnode kiil /pal_webcommander_node &> /dev/null
