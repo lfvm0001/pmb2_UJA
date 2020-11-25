@@ -26,14 +26,23 @@ class nav_client():
         goal.target_pose.header.frame_id = "map"
         goal.target_pose.header.stamp = rospy.Time.now()
 
-        goal.target_pose.pose.position.x =  1.82
-        goal.target_pose.pose.position.y = -0.27
+        # goal.target_pose.pose.position.x =  3.40
+        # goal.target_pose.pose.position.y = -0.28
+        # goal.target_pose.pose.position.z =  0.00 
+
+        # goal.target_pose.pose.orientation.x = 0.00
+        # goal.target_pose.pose.orientation.y = 0.00 
+        # goal.target_pose.pose.orientation.z = 0.97
+        # goal.target_pose.pose.orientation.w = 0.22
+        
+        goal.target_pose.pose.position.x =  0.23
+        goal.target_pose.pose.position.y = -1.42
         goal.target_pose.pose.position.z =  0.00 
 
         goal.target_pose.pose.orientation.x = 0.00
         goal.target_pose.pose.orientation.y = 0.00 
-        goal.target_pose.pose.orientation.z = 0.97
-        goal.target_pose.pose.orientation.w = 0.20
+        goal.target_pose.pose.orientation.z = 0.51
+        goal.target_pose.pose.orientation.w = 0.85
 
         navClient.send_goal(goal)
         navClient.wait_for_result()
