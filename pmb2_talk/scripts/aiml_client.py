@@ -8,6 +8,6 @@ rospy.init_node('aiml_client')
 r = rospy.Rate(1)  
 
 while not rospy.is_shutdown(): 
-   input = raw_input("\nEnter your text :> ") 
+   input = raw_input("") 
    pub.publish(input) 
    r.sleep()

@@ -1,0 +1,16 @@
+<aiml version="1.0.1" encoding="UTF-8"> 
+
+	<category> 
+		<pattern> MI NOMBRE ES * </pattern> 
+		<template> 
+			Hola <star/> 
+		</template> 
+	</category> 
+
+	<category> 
+		<pattern> COMO ESTAS </pattern> 
+		<template> 
+			Bien 
+		</template> 
+	</category> 
+</aiml> 

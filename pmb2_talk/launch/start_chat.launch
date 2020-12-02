@@ -1,5 +1,6 @@
 <launch> 
-	<param name="aiml_path" value="/home/tini/Documents/TFM/pmb2_robot/src/pmb2_sim/pmb2_UJA/pmb2_talk/aiml" /> 
+	
+	<param name="aiml_path" value="$(find pmb2_talk)/aiml" /> 
     
 	<node name="aiml_server" pkg="pmb2_talk" type="aiml_server.py" output="screen"/> 
     <node name="aiml_client" pkg="pmb2_talk" type="aiml_client.py" output="screen"/> 

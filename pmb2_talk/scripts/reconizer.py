@@ -1,10 +1,12 @@
+#!/usr/bin/env python
+
 import rospy 
 from std_msgs.msg import String 
 
 
 rospy.init_node('aiml_speech_recog_client') 
 pub = rospy.Publisher('chatter', String,queue_size=10) 
-r = rospy.Rate(1) # 10hz 
+r = rospy.Rate(1)
 
 def get_speech(data): 
   speech_text=data.data 
