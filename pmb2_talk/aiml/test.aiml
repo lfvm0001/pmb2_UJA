@@ -10,7 +10,7 @@
 	<category> 
 		<pattern> COMO ESTAS </pattern> 
 		<template> 
-			Bien 
+			Bien, este es el laboratorio de robotica, donde se encuentran los robots las celulas los PLC , adios
 		</template> 
 	</category> 
 </aiml> 
