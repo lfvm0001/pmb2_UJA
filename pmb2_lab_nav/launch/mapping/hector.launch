@@ -1,4 +1,5 @@
 <launch>
+
   <arg name="scan_topic"  default="/scan" />
   
   <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" output="screen">
