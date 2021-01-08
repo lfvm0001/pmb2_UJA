@@ -6,16 +6,16 @@
   
   <param name="use_sim_time" value="false" />  
   <machine name="pmb2-5c" address="10.68.0.1" user="root" env-loader="/home/pal/pmb2_UJA/scripts/env.sh" />
-
-
-  <node machine="pmb2-5c" name="map_server" pkg="map_server" type="map_server" args="/home/pal/pmb2_UJA/src/pmb2_lab_nav/maps/lab1_$(arg map_method).yaml" />
+  
+  
+  <node machine="pmb2-5c" name="map_server" pkg="map_server" type="map_server" args="/home/pal/pmb2_UJA/src/pmb2_lab_nav/maps/lab_$(arg map_method).yaml" />
   
   <group if="$(arg rviz)">
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find pmb2_lab_nav)/rviz/$(arg rvizconfig).rviz" />
   </group>
   
   <node pkg="amcl" type="amcl" name="amcl" machine="pmb2-5c">
-	<rosparam file="$(find pmb2_lab_nav)/config/localization/amcl2.yaml" command="load"/>
+	<rosparam file="$(find pmb2_lab_nav)/config/localization/amcl.yaml" command="load"/>
   </node>
     
 </launch>
