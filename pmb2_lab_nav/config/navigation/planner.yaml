@@ -58,8 +58,8 @@ DWAPlannerROS:
   vtheta_samples: 20
   
   yaw_goal_tolerance: 0.5
-  xy_goal_tolerance : 0.3
-  latch_xy_goal_tolerance: false
+  xy_goal_tolerance : 0.2
+  latch_xy_goal_tolerance: true
   
   
 
