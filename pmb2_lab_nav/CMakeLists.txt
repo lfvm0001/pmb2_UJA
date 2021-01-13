@@ -57,7 +57,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate services in the 'srv' folder
  add_service_files(
    FILES
-   face_action.srv
+   move_action.srv
 #   Service1.srv
 #   Service2.srv
  )

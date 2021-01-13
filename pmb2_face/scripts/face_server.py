@@ -5,12 +5,12 @@ import glob
 import rospy
 import pygame
 from pathlib import Path
-from pmb2_lab_nav.srv import face_action, face_actionResponse
+from pmb2_face.srv import face_action, face_actionResponse
 
 global my_group
 
 SIZE = WIDTH, HEIGHT = 775, 545
-FPS = 15
+FPS = 7
 PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 
  
@@ -20,9 +20,9 @@ class MySprite(pygame.sprite.Sprite):
         super(MySprite, self).__init__()
 
         if action == "idle":
-            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot1*.jpeg')]
+            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot1*.png')]
         if action == "talk":
-            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot*.jpeg')]
+            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot*.png')]
         
         self.index = 0
         self.rect = pygame.Rect(5, 5, 150, 198)
@@ -46,7 +46,6 @@ def face_response(request):
     my_group = pygame.sprite.Group(robot)
            
     return face_actionResponse(
-        change_face = True,
         action_resp = action 
     )
     
