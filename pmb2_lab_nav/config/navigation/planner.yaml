@@ -35,9 +35,9 @@ GlobalPlanner:
 
 DWAPlannerROS:
 
-  acc_lim_x: 0.9
+  acc_lim_x: 0.8
   acc_lim_y: 0.0
-  acc_lim_th: 1.67
+  acc_lim_th: 1.5
   
   max_vel_x: 0.9
   min_vel_x: 0.1
