@@ -53,15 +53,15 @@ class movePoint_node():
                 self.navClient.wait_for_result()
                 
                 if self.navClient.get_state() == 3:
-                    return ("Done")
+                    return (0)
                 else:
-                    return("Something went wrong")
+                    return(1)
                 
             else:
-                return("Not valid")
+                return(2)
         
         else:
-            return("Not valid")
+            return(2)
 
     
 if __name__ == '__main__':

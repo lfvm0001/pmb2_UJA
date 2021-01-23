@@ -4,6 +4,7 @@ import time
 import rospy
 from std_msgs.msg import *
 from pmb2_lab_nav.srv import move_service
+from pmb2_face.srv import talk_service
 
 
 class control_node():
@@ -17,6 +18,7 @@ class control_node():
         
         try:
             self.move_srv = rospy.ServiceProxy('move_srv', move_service)
+            self.talk_srv = rospy.ServiceProxy('talk_srv', talk_service)
             self.loop()
         
         except rospy.ServiceException:
@@ -26,13 +28,18 @@ class control_node():
     def loop(self):
     
         for i in range(0,6):
-            result = self.move_srv("move",i)
-            print(result.move_resp)
+            resultMove = self.move_srv("move",i)
+            print(resultMove.move_resp)
             
-            if result.move_resp == "Done":
+            if resultMove.move_resp == 0:
                 self.pub.publish("talk")
-                time.sleep(5)
-                self.pub.publish("idle")
+                resultTalk = self.talk_srv("talk",i)
+                
+                if resultTalk.talk_resp == 0:
+                    self.pub.publish("idle")
+            
+            else:
+                print("fallo")
         
         print("FINAL DONE")
    

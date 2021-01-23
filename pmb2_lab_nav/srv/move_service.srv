@@ -1,4 +1,4 @@
 string move_req
 int16  pose_req 
 ---
-string move_resp
+int16 move_resp

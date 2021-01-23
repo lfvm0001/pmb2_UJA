@@ -1,0 +1,4 @@
+string talk_req
+int16  pose_req 
+---
+int16 talk_resp
