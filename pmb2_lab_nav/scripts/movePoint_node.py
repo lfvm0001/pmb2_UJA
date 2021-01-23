@@ -7,12 +7,14 @@ from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 
-class move_points_node():
+class movePoint_node():
 
     def __init__(self):
-        self.goals = [[0.79,1.89,0.00,0.00,0.00,0.06,0.99],[-4.02,2.03,0.00,0.00,0.00,-0.08,0.99],[-4.00,-4.03,0.00,0.00,0.00,-0.06,0.99],[0.22,-4.68,0.00,0.00,0.00,-0.07,0.99],[-1.20,-1.32,0.00,0.00,0.00,-0.07,0.99],[-1.57,2.16,0.00,0.00,0.00,-0.75,0.65]]
         
-        rospy.init_node('move_to_points')
+        self.goals = [[0.79,1.89,0.00,0.00,0.00,0.06,0.99],[-4.02,2.03,0.00,0.00,0.00,-0.08,0.99],[-4.00,-4.03,0.00,0.00,0.00,-0.06,0.99],
+                      [0.22,-4.68,0.00,0.00,0.00,-0.07,0.99],[-1.20,-1.32,0.00,0.00,0.00,-0.07,0.99],[-1.57,2.16,0.00,0.00,0.00,-0.75,0.65]]
+        
+        rospy.init_node('movePoint_node')
         
         self.navClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         wait = self.navClient.wait_for_server(rospy.Duration(5.0))
@@ -27,8 +29,8 @@ class move_points_node():
         rospy.Service('move_srv', move_service, self.move_response) 
         rospy.spin() 
 
-
     def move_response(self,req):
+        
         if req.move_req == "move":
             
             if req.pose_req <= 5 and req.pose_req >= 0:
@@ -63,8 +65,9 @@ class move_points_node():
 
     
 if __name__ == '__main__':
+    
     try:
-        move_points_node()
+        movePoint_node()
         
     except rospy.ROSInterruptException:
         pass

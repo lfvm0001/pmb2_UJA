@@ -17,6 +17,7 @@ soundhandle.stopAll()
 def get_response(data): 
     response = data.data 
     soundhandle.say(response,voice) 
+    print("done")
 
 def listener(): 
     rospy.Subscriber("response",String, get_response,queue_size=10) 

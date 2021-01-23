@@ -5,24 +5,26 @@ import glob
 import rospy
 import pygame
 from pathlib import Path
-from pmb2_face.srv import face_action, face_actionResponse
+from std_msgs.msg import *
+
 
 global my_group
 
-SIZE = WIDTH, HEIGHT = 775, 545
 FPS = 7
+SIZE = WIDTH, HEIGHT = 775, 545
 PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 
  
 class MySprite(pygame.sprite.Sprite):
     
     def __init__(self, action):
+        
         super(MySprite, self).__init__()
 
         if action == "idle":
-            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot1*.png')]
+            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot1*.png')] 
         if action == "talk":
-            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot*.png')]
+            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot*2.png')]
         
         self.index = 0
         self.rect = pygame.Rect(5, 5, 150, 198)
@@ -33,26 +35,24 @@ class MySprite(pygame.sprite.Sprite):
         self.image = self.images[self.index]
         self.index += 1
 
-def face_response(request):
+
+def face_response(data):
     
     global my_group
     
-    if request.action_req == "talk":
-        action = request.action_req
+    if data.data == "talk":
+        action = data.data
     else:
         action = "idle"
     
     robot = MySprite(action)
     my_group = pygame.sprite.Group(robot)
-           
-    return face_actionResponse(
-        action_resp = action 
-    )
     
 
 def main ():
+    
     rospy.init_node('face_node')                    
-    my_service = rospy.Service('/face_service', face_action, face_response)
+    rospy.Subscriber("face_action", String, face_response)
     
     loop = 1
     while loop and not rospy.is_shutdown():
@@ -68,7 +68,9 @@ def main ():
         
     rospy.spin() 
 
+
 if __name__ == '__main__':
+    
     try:
         pygame.init()
         screen = pygame.display.set_mode(SIZE)

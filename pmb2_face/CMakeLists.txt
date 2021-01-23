@@ -9,7 +9,6 @@ project(pmb2_face)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   rospy
-  sound_play
   std_msgs
   message_generation
 )
@@ -106,7 +105,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES pmb2_face
-   CATKIN_DEPENDS rospy sound_play std_msgs
+   CATKIN_DEPENDS rospy std_msgs
 #  DEPENDS system_lib
 )
 
