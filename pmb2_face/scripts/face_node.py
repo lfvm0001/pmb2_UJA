@@ -49,9 +49,11 @@ def face_response(data):
     my_group = pygame.sprite.Group(robot)
     
 
-def main ():
+def face_node ():
     
-    rospy.init_node('face_node')                    
+    rospy.init_node('face_node')   
+    rospy.loginfo("Starting face Node")  
+    
     rospy.Subscriber("face_action", String, face_response)
     
     loop = 1
@@ -80,7 +82,7 @@ if __name__ == '__main__':
         my_group = pygame.sprite.Group(robot)
     
         clock = pygame.time.Clock()
-        main()
+        face_node()
         
     except rospy.ROSInterruptException:
         pass

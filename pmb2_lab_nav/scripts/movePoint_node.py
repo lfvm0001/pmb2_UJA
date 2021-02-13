@@ -15,16 +15,17 @@ class movePoint_node():
                       [0.22,-4.68,0.00,0.00,0.00,-0.07,0.99],[-1.20,-1.32,0.00,0.00,0.00,-0.07,0.99],[-1.57,2.16,0.00,0.00,0.00,-0.75,0.65]]
         
         rospy.init_node('movePoint_node')
+        rospy.loginfo("Starting movePoint Node") 
         
         self.navClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         wait = self.navClient.wait_for_server(rospy.Duration(5.0))
 
         if not wait:
-            rospy.logerr("Action server not available!")
-            rospy.signal_shutdown("Action server not available!")
+            rospy.loginfo("move_base server not available!")
+            rospy.signal_shutdown("move_base server not available!")
             return
         
-        rospy.loginfo("Connected to move base server")
+        rospy.loginfo("Connected to move_base server")
            
         rospy.Service('move_srv', move_service, self.move_response) 
         rospy.spin() 
@@ -64,8 +65,7 @@ class movePoint_node():
             return(2)
 
     
-if __name__ == '__main__':
-    
+if __name__ == '__main__': 
     try:
         movePoint_node()
         

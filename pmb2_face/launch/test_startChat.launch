@@ -1,0 +1,11 @@
+<launch> 
+	
+	<param name="aiml_path" value="$(find pmb2_face)/aiml" />  
+	<include file="$(find sound_play)/soundplay_node.launch"/>
+	
+	<node name="chat_server"   pkg="pmb2_face" type="chat_server.py"   output="screen"/> 
+	<node name="txts_client"   pkg="pmb2_face" type="txts_client.py"   output="screen"/> 
+	<node name="sound_player"  pkg="pmb2_face" type="sound_player.py"  output="screen"/> 
+	<node name="speech_client" pkg="pmb2_face" type="speech_client.py" output="screen"/>
+	
+</launch> 

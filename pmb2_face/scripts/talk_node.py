@@ -15,7 +15,8 @@ class talk_node():
         rospack = rospkg.RosPack()
         self.audiosPath = rospack.get_path("pmb2_face") + "/audios/"
         
-        rospy.init_node('robot_talk')
+        rospy.init_node('talk_node')
+        rospy.loginfo("Starting talk Node") 
         
         rospy.Service('talk_srv', talk_service, self.talk_response) 
         rospy.spin() 
@@ -33,7 +34,7 @@ class talk_node():
                 pygame.mixer.music.load(audio)
                 pygame.mixer.music.play()
                 
-                time.sleep(0.5)
+                time.sleep(0.2)
                 while pygame.mixer.music.get_busy():
                     pass
                     
