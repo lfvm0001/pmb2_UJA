@@ -8,9 +8,9 @@
 	</category> 
 
 	<category> 
-		<pattern> COMO ESTAS </pattern> 
+		<pattern> CÓMO ESTÁS </pattern> 
 		<template> 
-			Bien, este es el laboratorio de robotica, donde se encuentran los robots las celulas los PLC , adios
+			Bien por dicha
 		</template> 
 	</category> 
 </aiml> 

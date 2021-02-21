@@ -28,20 +28,28 @@ class speech2text_node():
         rospy.spin() 
     
     
-    def get_text(self): 
-        r = sr.Recognizer() 
+    def get_text(self, data): 
+        
+        if data.data == "Talk":
+            loop = True
+            r = sr.Recognizer() 
  
-        with  sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source)
-            rospy.loginfo('Hearing...')
+            with  sr.Microphone() as source:
+
+                while loop:
+                    r.adjust_for_ambient_noise(source)
+                    rospy.loginfo('Hearing...')
             
-            audio = r.listen(source,timeout=5, phrase_time_limit=5)
- 
-            try:
-                text = r.recognize_google(audio, language="es-ES")
-                self.text_pub.publish(text)
-            except:
-                self.text_pub.publish("error")
+                    audio = r.listen(source,timeout=5, phrase_time_limit=5)
+                    
+                    try:
+                        text = r.recognize_google(audio, language="es-ES")
+                        self.text_pub.publish(text)
+                        rospy.loginfo("Text: " + text)
+                        loop = False
+                    
+                    except:
+                        pass
 
 
 if __name__ == '__main__':
