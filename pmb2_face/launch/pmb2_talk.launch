@@ -1,0 +1,10 @@
+<launch>
+
+  <node pkg="pmb2_face" type="face_node" name="face_node" respawn="true" output="screen" />
+  <node pkg="pmb2_face" type="talk_node" name="talk_node" respawn="true" output="screen" />
+  <node pkg="pmb2_face" type="speech2text_node" name="speech2text_node" respawn="true" output="screen" />
+  <node pkg="pmb2_face" type="aiml_node" name="aiml_node" respawn="true" output="screen" />
+  <node pkg="pmb2_face" type="text2speech_node" name="text2speech_node" respawn="true" output="screen" />
+  
+
+</launch>
