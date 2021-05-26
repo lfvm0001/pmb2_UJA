@@ -1,34 +1,41 @@
 #!/usr/bin/env python
 
+import ttk
 import rospy
-import atexit
-from tkinter import *
-from tkinter import ttk
+from Tkinter import *
+from std_msgs.msg import *
 
 class GUI():
     def __init__(self):
-        self.window = Tk() 
+        self.window = Tk()
+        
+        rospy.init_node('messages_node')
+        rospy.loginfo("Starting messages Node") 
+        
+        rospy.Subscriber("info_msgs", String, self.messages, queue_size=10) 
+        self.create()
         
     def messages(self, data):
         msg = data.data
         self.autoMsj_text.insert(INSERT, msg)
         self.autoMsj_text.see(END)
+        self.autoMsj_text.insert(INSERT, "\n")
+        self.autoMsj_text.see(END)
      
     def create(self):
-        self.window.title("Robot Guía")
-        self.window_height = 80
-        self.window_width  = 720
+        self.window.title("Robot Guia")
+       
+        self.screen_width = self.window.winfo_screenwidth()
+        self.screen_height = self.window.winfo_screenheight()
         
-        screen_width = self.window.winfo_screenwidth()
-        screen_height = self.window.winfo_screenheight()
-
-        x_cordinate = int((screen_width/2) - (self.window_width/2))
-        y_cordinate = int((screen_height/2) - (self.window_height/2))
-
-        self.window.geometry("{}x{}+{}+{}".format(self.window_width, self.window_height, x_cordinate, y_cordinate))
+        self.window_height = 80  
+        self.window_width = 157  
+        
+        self.y_cordinate = int((self.screen_height) - (self.window_height/2))
+        self.window.geometry("{}x{}+{}+{}".format(self.screen_width, self.window_height, 0, self.y_cordinate))
         
         #Componentes 
-        self.autoMsj_text = Text(self.window, height=3, width=85)
+        self.autoMsj_text = Text(self.window, height=3, width=self.window_width)
         self.autoMsj_text.grid(row=0, column=0, padx=10, pady=10)
         self.autoMsj_text.insert(INSERT, "Cargando Archivos... \n")
         self.autoMsj_text.see(END)
@@ -36,27 +43,21 @@ class GUI():
         scroll = Scrollbar(self.window, command=self.autoMsj_text.yview)
         scroll.grid(row=0, column=2, sticky='nsew')
         self.autoMsj_text['yscrollcommand'] = scroll.set
- 
-class messages_node():
-
-    def __init__(self):
-        rospy.init_node('messages_node')
-        rospy.loginfo("Starting messages Node") 
         
-        msg_app = GUI()
-        msg_app.create()
+    def __enter__(self):
+        print("Inicializando programa")
+        return self 
         
-        rospy.Subscriber("info_msgs", String, msg_app.messages, queue_size=10) 
-
-        self.window.mainloop()
-    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print("Cerrando programa")
 
 if __name__ == '__main__':
-    try:
-        messages_node()
-        
-    except rospy.ROSInterruptException:
-        pass
-    
-    
+    with GUI() as mainProgram:
+        mainProgram.window.mainloop()
+
+
+
+
+
+  
 

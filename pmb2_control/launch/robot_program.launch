@@ -1,0 +1,7 @@
+<launch>
+
+  <node pkg="pmb2_control" type="messages_node.py" name="messages_node" respawn="true" output="screen" />
+  <node pkg="pmb2_control" type="controlSM_node.py" name="controlSM" respawn="true" output="screen" />
+  
+
+</launch>

@@ -13,13 +13,11 @@ class initRobot(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes = ['done','error'])
 
-    def execute(self):
+    def execute(self, userdata):
+        for i in range(4):
+            print("hello")
+        return ('error')
         
-        
-        if resultMove.move_resp == 0:
-            return ('done')
-        elif resultMove.move_resp == 1:
-            return('error')  
 
 
 
@@ -37,24 +35,26 @@ def controlSM_node():
     with sm:
    
         smach.StateMachine.add('STATE1', initRobot(),
-                               transitions = {'done':'STATE2',
-                                              'error':'STATE1'})
-
-        smach.StateMachine.add('STATE2', initRaspi(),
-                               transitions = {'done':'STATE3',
-                                              'error':'STATE2')
-
-        smach.StateMachine.add('STATE3', welcome(),
-                               transitions = {'done':'STATE4',
-                                              'error':'STATE3')  
-                                              
-        smach.StateMachine.add('STATE4', initPose(),
-                               transitions = {'done':'STATE5',
-                                              'error':'STATE4')
-                                              
-        smach.StateMachine.add('STATE5', askUser(),
                                transitions = {'done':'succeeded',
-                                              'error':'failed')                                              
+                                              'error':'failed'})
+                               # transitions = {'done':'STATE2',
+                                              # 'error':'STATE1'})
+
+        # smach.StateMachine.add('STATE2', initRaspi(),
+                               # transitions = {'done':'STATE3',
+                                              # 'error':'STATE2'})
+
+        # smach.StateMachine.add('STATE3', welcome(),
+                               # transitions = {'done':'STATE4',
+                                              # 'error':'STATE3'})  
+                                              
+        # smach.StateMachine.add('STATE4', initPose(),
+                               # transitions = {'done':'STATE5',
+                                              # 'error':'STATE4'})
+                                              
+        # smach.StateMachine.add('STATE5', askUser(),
+                               # transitions = {'done':'succeeded',
+                                              # 'error':'failed'})                                              
 
 
 
