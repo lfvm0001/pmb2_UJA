@@ -22,7 +22,7 @@ class speech2text_node():
     
     def get_text(self, data): 
         
-        if data.data == "Talk":
+        if data.data == "talk":
             p = pyaudio.PyAudio()
 
             stream = p.open(rate=16000, format=p.get_format_from_width(2), channels=2, input=True, input_device_index=0)
@@ -60,6 +60,7 @@ class speech2text_node():
                     os.remove(sound)
                     
                 except:
+                    rospy.loginfo("Connection problem")
                     pass
 
 

@@ -31,29 +31,33 @@ class text2speech_node():
     
     def get_audio(self,data): 
         text = data.data 
-       
-        response = self.polly.synthesize_speech(Text=text, VoiceId='Lucia', OutputFormat='ogg_vorbis')
-        body = response['AudioStream'].read()
-        file_name = self.audioPath
+        
+        try:
+            response = self.polly.synthesize_speech(Text=text, VoiceId='Lucia', OutputFormat='ogg_vorbis')
+            body = response['AudioStream'].read()
+            file_name = self.audioPath
     
-        with open(file_name, 'wb') as file:
-            file.write(body)
-            file.close()
+            with open(file_name, 'wb') as file:
+                file.write(body)
+                file.close()
             
-        pygame.init()
-        pygame.mixer.init() 
-        pygame.mixer.music.load(file_name)
+            pygame.init()
+            pygame.mixer.init() 
+            pygame.mixer.music.load(file_name)
         
-        self.face_pub.publish("talk")
-        pygame.mixer.music.play()
+            self.face_pub.publish("talk")
+            pygame.mixer.music.play()
                 
-        time.sleep(0.2)
-        while pygame.mixer.music.get_busy():
-            pass
+            time.sleep(0.2)
+            while pygame.mixer.music.get_busy():
+                pass
         
-        pygame.mixer.quit()
-        self.face_pub.publish("idle")
-
+            pygame.mixer.quit()
+            self.face_pub.publish("idle")
+        
+        except:
+            rospy.loginfo("Connection problem")
+            pass
 
 if __name__ == '__main__':
     try:

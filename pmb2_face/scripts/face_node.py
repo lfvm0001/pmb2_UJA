@@ -29,7 +29,8 @@ class MySprite(pygame.sprite.Sprite):
             self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot3.png')]
         
         self.index = 0
-        self.rect = pygame.Rect(0, 0, 795, 415)
+        self.rect = self.images[0].get_rect()
+        self.rect.center = (398,208)
 
     def update(self):
         if self.index >= len(self.images):
