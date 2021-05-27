@@ -10,8 +10,8 @@ from std_msgs.msg import *
 
 global my_group
 
-FPS = 7
-SIZE = WIDTH, HEIGHT = 775, 545
+FPS = 20
+SIZE = WIDTH, HEIGHT = 795, 415
 PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 
  
@@ -22,12 +22,14 @@ class MySprite(pygame.sprite.Sprite):
         super(MySprite, self).__init__()
 
         if action == "idle":
-            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot1*.png')] 
-        if action == "talk":
+            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot1*.png')]  
+        elif action == "talk":
             self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot*2.png')]
+        elif action == "smile":
+            self.images = [pygame.image.load(img) for img in glob.glob(str(PATH) + '/imgs/robot3.png')]
         
         self.index = 0
-        self.rect = pygame.Rect(5, 5, 150, 198)
+        self.rect = pygame.Rect(0, 0, 795, 415)
 
     def update(self):
         if self.index >= len(self.images):
@@ -40,8 +42,8 @@ def face_response(data):
     
     global my_group
     
-    if data.data == "talk":
-        action = data.data
+    if (data.data == "talk") or (data.data == "smile"):
+        action = data.data  
     else:
         action = "idle"
     
@@ -74,7 +76,8 @@ def face_node ():
 if __name__ == '__main__':
     
     try:
-        pygame.init()
+        pygame.display.init()
+        
         screen = pygame.display.set_mode(SIZE)
         pygame.display.set_caption("My robot")
     

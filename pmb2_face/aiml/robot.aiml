@@ -1,0 +1,75 @@
+<aiml version="1.0.1" encoding="UTF-8"> 
+
+	<category> 
+		<pattern> MI NOMBRE ES * </pattern> 
+		<template> 
+			<random>
+				<li> Hola <set name = "username"> <star/>! </set> </li>
+				<li> Mucho gusto en conocerte <set name = "username"> <star/>! </set> </li>
+			</random>
+		</template> 
+	</category> 
+	
+	<category> 
+		<pattern> ME LLAMO * </pattern> 
+		<template> 
+			<srai> MI NOMBRE ES <star/> </srai>
+		</template> 
+	</category> 
+	
+	<category> 
+		<pattern> YO ME LLAMO * </pattern> 
+		<template> 
+			<srai> MI NOMBRE ES <star/> </srai>
+		</template> 
+	</category> 
+	
+	<category> 
+		<pattern> YO SOY * </pattern> 
+		<template> 
+			<srai> MI NOMBRE ES <star/> </srai>
+		</template> 
+	</category> 
+	
+	<category> 
+		<pattern> SOY * </pattern> 
+		<template> 
+			<srai> MI NOMBRE ES <star/> </srai>
+		</template> 
+	</category>
+
+	<category> 
+		<pattern> HOLA MI NOMBRE ES * </pattern> 
+		<template> 
+			<srai> MI NOMBRE ES <star/> </srai>
+		</template> 
+	</category>
+	
+	<category> 
+		<pattern> HOLA ME LLAMO * </pattern> 
+		<template> 
+			<srai> MI NOMBRE ES <star/> </srai>
+		</template> 
+	</category>
+
+
+	<category> 
+		<pattern> ¿CÓMO ESTÁS? </pattern> 
+		<template> 
+			Muy bien y ¿tú <get name = "username"/> ?
+		</template> 
+	</category>
+	
+	<category>
+		<pattern> BIEN </pattern>
+		<that> Muy bien y ¿tú <get name = "username"/> ? </that>
+		<template> Me alegro que estés bien </template>
+   </category>
+   
+   	<category>
+		<pattern> MAL </pattern>
+		<that> Muy bien y ¿tú <get name = "username"/> ? </that>
+		<template> Lo siento, espero que te sientas mejor </template>
+   </category>
+ 
+</aiml> 

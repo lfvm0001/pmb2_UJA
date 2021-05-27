@@ -5,6 +5,7 @@ import rospy
 import pygame
 import rospkg
 import actionlib
+from std_msgs.msg import String 
 from pmb2_face.srv import talk_service
 
 
@@ -18,6 +19,7 @@ class talk_node():
         rospy.init_node('talk_node')
         rospy.loginfo("Starting talk Node") 
         
+        self.face_pub = rospy.Publisher('face_action', String, queue_size=10)
         rospy.Service('talk_srv', talk_service, self.talk_response) 
         rospy.spin() 
 
@@ -32,6 +34,7 @@ class talk_node():
                 
                 audio = self.audiosPath + "audio" + str(req.pose_req) + ".ogg"
                 pygame.mixer.music.load(audio)
+                self.face_pub.publish("talk")
                 pygame.mixer.music.play()
                 
                 time.sleep(0.2)
@@ -39,6 +42,7 @@ class talk_node():
                     pass
                     
                 pygame.mixer.quit()
+                self.face_pub.publish("idle")
                 return (0)
                 
             else:
