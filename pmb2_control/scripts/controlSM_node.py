@@ -16,9 +16,17 @@ class initRobot(smach.State):
     def execute(self, userdata):
         for i in range(4):
             print("hello")
-        return ('error')
+        return ('done')
         
+class initRaspi(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes = ['done','error'])
 
+    def execute(self, userdata):
+        for i in range(4):
+            print("hello2")
+        return ('done')
+        
 
 
 
@@ -35,14 +43,12 @@ def controlSM_node():
     with sm:
    
         smach.StateMachine.add('STATE1', initRobot(),
-                               transitions = {'done':'succeeded',
-                                              'error':'failed'})
-                               # transitions = {'done':'STATE2',
-                                              # 'error':'STATE1'})
+                                transitions = {'done':'STATE2',
+                                              'error':'STATE1'})
 
-        # smach.StateMachine.add('STATE2', initRaspi(),
-                               # transitions = {'done':'STATE3',
-                                              # 'error':'STATE2'})
+        smach.StateMachine.add('STATE2', initRaspi(),
+                                transitions = {'done':'succeeded',
+                                              'error':'failed'})
 
         # smach.StateMachine.add('STATE3', welcome(),
                                # transitions = {'done':'STATE4',

@@ -37,7 +37,7 @@ class GUI():
         #Componentes 
         self.autoMsj_text = Text(self.window, height=3, width=self.window_width)
         self.autoMsj_text.grid(row=0, column=0, padx=10, pady=10)
-        self.autoMsj_text.insert(INSERT, "Cargando Archivos... \n")
+        self.autoMsj_text.insert(INSERT, "Inicializando... \n")
         self.autoMsj_text.see(END)
         
         scroll = Scrollbar(self.window, command=self.autoMsj_text.yview)

@@ -1,7 +1,12 @@
 <launch>
-
-  <node pkg="pmb2_control" type="messages_node.py" name="messages_node" respawn="true" output="screen" />
-  <node pkg="pmb2_control" type="controlSM_node.py" name="controlSM" respawn="true" output="screen" />
+	<include file="$(find pmb2_lab_nav)/launch/pmb2_move.launch">
+		<arg name="rviz" value="false"/>
+	</include>
+  
+    <include file="$(find pmb2_face)/launch/pmb2_talk.launch"/>
+	
+	<node pkg="pmb2_control" type="messages_node.py" name="messages_node" respawn="true" output="screen" />
+	<node pkg="pmb2_control" type="controlSM_node.py" name="controlSM" respawn="true" output="screen" />
   
 
 </launch>
