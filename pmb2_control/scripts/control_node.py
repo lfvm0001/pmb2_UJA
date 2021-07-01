@@ -6,35 +6,48 @@ import rospkg
 import smach_ros
 from std_msgs.msg import *
 from pmb2_face.srv import talk_service
+from pmb2_face.srv import listen_service
 from pmb2_lab_nav.srv import move_service
 
 
 class state(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes = ['done'],
-                                 input_keys = ['cont_in'],
-                                output_keys = ['cont_out', 'point_out','final_out'])
-        
-        rospack = rospkg.RosPack()
-        self.configPath = rospack.get_path("pmb2_control") + "/config/pointsConfig.txt"
+        smach.State.__init__(self, outcomes = ['done','error'],
+                                 input_keys = ['cont_in','names_in'],
+                                output_keys = ['point_out','final_out','cont_out','names_out'])
 
-        self.names = {}
-        with open(self.configPath) as f:
-            for line in f:
-                (key, val,name) = line.split()
-                self.names[int(key)] = name
-                
+        self.tts_pub = rospy.Publisher('tts', String, queue_size=10) 
+        self.listen_srv = rospy.ServiceProxy('listen_srv', listen_service)        
     
     def execute(self, userdata):
-        if userdata.cont_in == (len(self.names)-1):
-            userdata.point_out = userdata.cont_in + 1
+        if len(userdata.names_in) == 1:
+            userdata.point_out = int(list(userdata.names_in)[0])
             userdata.final_out = 1
 
         else:
-            userdata.cont_out = userdata.cont_in + 1
-            userdata.point_out = userdata.cont_in
-            userdata.final_out = 0
+            if userdata.cont_in == 0:
+                response="Primer punto"
+                self.tts_pub.publish(response) 
+
+                userdata.point_out = int(list(userdata.names_in)[0])
+                userdata.cont_out = 1
+                
+                del userdata.names_in[list(userdata.names_in)[0]]
             
+            else:
+                self.tts_pub.publish(" ")
+                response="Deseas ir a "+ userdata.names_in[list(userdata.names_in)[0]] + " o a " +userdata.names_in[list(userdata.names_in)[1]]
+                self.tts_pub.publish(response) 
+                
+                resultListen = self.listen_srv("listen")
+                
+                if resultListen.listen_resp == userdata.names_in[list(userdata.names_in)[1]]:
+                    userdata.point_out = int(list(userdata.names_in)[1])
+                    del userdata.names_in[list(userdata.names_in)[1]]
+                else:
+                    userdata.point_out = int(list(userdata.names_in)[0])
+                    del userdata.names_in[list(userdata.names_in)[0]]                
+                    
         return ('done')
 
 
@@ -95,20 +108,32 @@ class final(smach.State):
 def control_node():
     rospy.init_node('control_node')
     rospy.loginfo("Starting control Node") 
-  
+    
+    rospack = rospkg.RosPack()
+    configPath = rospack.get_path("pmb2_control") + "/config/pointsConfig.txt"
+
     sm = smach.StateMachine(outcomes = ['succeeded', 'failed'])
-    sm.userdata.counter = 0
     sm.userdata.point  = 0
     sm.userdata.final = 0
+    sm.userdata.cont = 0
+    
+    sm.userdata.names = {}
+    with open(configPath) as f:
+        for line in f:
+            (key, val,name) = line.split()
+            sm.userdata.names[int(key)] = name
 
     with sm:
    
         smach.StateMachine.add('STATE', state(),
-                               transitions = {'done':'NAV'},
-                                 remapping = {'cont_in':'counter',
-                                              'cont_out':'counter',
+                               transitions = {'done':'NAV',
+                                              'error':'STATE'},
+                                 remapping = {'cont_in':'cont',
+                                              'names_in':'names',
                                               'point_out':'point',
-                                              'final_out':'final'})
+                                              'final_out':'final',
+                                              'cont_out':'cont',
+                                              'names_out':'names'})
 
         smach.StateMachine.add('NAV', nav(),
                                transitions = {'done':'TALK',
