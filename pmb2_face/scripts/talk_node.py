@@ -27,12 +27,12 @@ class talk_node():
     def talk_response(self,req):
         
         if req.talk_req == "talk":
-            if req.pose_req <= 5 and req.pose_req >= 0:
+            if req.pose_req >= 0:
                 
                 pygame.init()
                 pygame.mixer.init()
                 
-                audio = self.audiosPath + "audio" + str(req.pose_req) + ".ogg"
+                audio = self.audiosPath + str(req.pose_req) + ".ogg"
                 pygame.mixer.music.load(audio)
                 self.face_pub.publish("talk")
                 pygame.mixer.music.play()

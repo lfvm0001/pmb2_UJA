@@ -2,7 +2,7 @@
 
   <arg name="rvizconfig" default="robot_navigation" />
   <arg name="map_method" default="gmapping" />
-  <arg name="rviz" default="true"/>
+  <arg name="rviz" default="false"/>
   
   <include file="$(find pmb2_lab_nav)/launch/pmb2_localization.launch">
     <arg name="rvizconfig" value="$(arg rvizconfig)"/>
@@ -11,5 +11,7 @@
   </include>
   
   <include file="$(find pmb2_lab_nav)/launch/pmb2_navigation.launch"/>
-    
+  
+  <node pkg="pmb2_lab_nav" type="movePoint_node.py" name="movePoint_node" respawn="true" output="screen" />
+
 </launch>

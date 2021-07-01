@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+import rospkg
 import actionlib
 from pmb2_lab_nav.srv import move_service
 from actionlib_msgs.msg import GoalStatus
@@ -11,12 +12,20 @@ class movePoint_node():
 
     def __init__(self):
         
-        self.goals = [[0.79,1.89,0.00,0.00,0.00,0.06,0.99],[-4.02,2.03,0.00,0.00,0.00,-0.08,0.99],[-4.00,-4.03,0.00,0.00,0.00,-0.06,0.99],
-                      [0.22,-4.68,0.00,0.00,0.00,-0.07,0.99],[-1.20,-1.32,0.00,0.00,0.00,-0.07,0.99],[-1.57,2.16,0.00,0.00,0.00,-0.75,0.65]]
-        
         rospy.init_node('movePoint_node')
         rospy.loginfo("Starting movePoint Node") 
         
+        rospack = rospkg.RosPack()
+        self.configPath = rospack.get_path("pmb2_control") + "/config/pointsConfig.txt"
+        
+        self.goals = {}
+        
+        with open(self.configPath) as f:
+            for line in f:
+                (key, val,name) = line.split()
+                self.goals[int(key)] = val
+                
+
         self.navClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         wait = self.navClient.wait_for_server(rospy.Duration(5.0))
 
@@ -34,21 +43,22 @@ class movePoint_node():
         
         if req.move_req == "move":
             
-            if req.pose_req <= 5 and req.pose_req >= 0:
-                target = self.goals[req.pose_req]
+            if req.pose_req <= len(self.goals) and req.pose_req >= 1:
+            
+                target = self.goals[req.pose_req].split(",")
                 
                 goal = MoveBaseGoal()
                 goal.target_pose.header.frame_id = "map"
                 goal.target_pose.header.stamp = rospy.Time.now()
                 
-                goal.target_pose.pose.position.x = target[0]
-                goal.target_pose.pose.position.y = target[1]
-                goal.target_pose.pose.position.z = target[2]
+                goal.target_pose.pose.position.x = float(target[0])
+                goal.target_pose.pose.position.y = float(target[1])
+                goal.target_pose.pose.position.z = float(target[2])
                 
-                goal.target_pose.pose.orientation.x = target[3]
-                goal.target_pose.pose.orientation.y = target[4]
-                goal.target_pose.pose.orientation.z = target[5]
-                goal.target_pose.pose.orientation.w = target[6]
+                goal.target_pose.pose.orientation.x = float(target[3])
+                goal.target_pose.pose.orientation.y = float(target[4])
+                goal.target_pose.pose.orientation.z = float(target[5])
+                goal.target_pose.pose.orientation.w = float(target[6])
                 
                 self.navClient.send_goal(goal)
                 self.navClient.wait_for_result()

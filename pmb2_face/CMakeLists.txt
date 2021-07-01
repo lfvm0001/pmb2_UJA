@@ -57,6 +57,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
    FILES
    talk_service.srv
+   listen_service.srv
 #   Service2.srv
 )
 
