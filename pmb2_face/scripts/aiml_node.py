@@ -31,11 +31,10 @@ class aiml_node():
         os.chdir(self.aimlPath) 
 
         if os.path.isfile("standard.brn"): 
-            self.mybot.bootstrap(brainFile = "standard.brn") 
+            os.remove("standard.brn")
 
-        else: 
-            self.mybot.bootstrap(learnFiles = "startup.xml", commands = "load aiml") 
-            self.mybot.saveBrain("standard.brn") 
+        self.mybot.bootstrap(learnFiles = "startup.xml", commands = "load aiml") 
+        self.mybot.saveBrain("standard.brn") 
 
  
     def get_resp(self, data): 

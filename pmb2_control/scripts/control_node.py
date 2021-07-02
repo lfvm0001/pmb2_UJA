@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import time
 import rospy
 import smach
 import rospkg
@@ -29,6 +30,7 @@ class state(smach.State):
                 response="Primer punto"
                 self.tts_pub.publish(response) 
 
+
                 userdata.point_out = int(list(userdata.names_in)[0])
                 userdata.cont_out = 1
                 
@@ -38,6 +40,7 @@ class state(smach.State):
                 self.tts_pub.publish(" ")
                 response="Deseas ir a "+ userdata.names_in[list(userdata.names_in)[0]] + " o a " +userdata.names_in[list(userdata.names_in)[1]]
                 self.tts_pub.publish(response) 
+                time.sleep(3)
                 
                 resultListen = self.listen_srv("listen")
                 
@@ -81,7 +84,7 @@ class talk(smach.State):
         
         if resultTalk.talk_resp == 0:
             if userdata.final_in == 1:
-                resultTalk = self.talk_srv("talk", 0)
+                resultTalk = self.talk_srv("talk", 100)
                 return('final')
             else:
                 return ('done')
