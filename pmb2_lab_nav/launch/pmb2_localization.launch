@@ -1,21 +1,25 @@
 <launch>
 
-  <arg name="rvizconfig" default="robot_localization" />
   <arg name="map_method" default="gmapping" />
-  <arg name="rviz" default="true"/>
+  <arg name="sim" default="false"/>
   
-  <param name="use_sim_time" value="false" />  
-  <machine name="pmb2-5c" address="10.68.0.1" user="root" env-loader="/home/pal/pmb2_UJA/scripts/env.sh" />
-  
-  
-  <node machine="pmb2-5c" name="map_server" pkg="map_server" type="map_server" args="/home/pal/pmb2_UJA/src/pmb2_lab_nav/maps/lab_$(arg map_method).yaml" />
-  
-  <group if="$(arg rviz)">
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find pmb2_lab_nav)/rviz/$(arg rvizconfig).rviz" />
+  <group if="$(arg sim)">
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find pmb2_lab_nav)/maps/sim_$(arg map_method).yaml" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find pmb2_lab_nav)/rviz/robot_nav.rviz" />
+    <include file="$(find pmb2_lab_nav)/launch/pmb2_gazebo.launch"/>
+	<node pkg="amcl" type="amcl" name="amcl">
+      <remap from="scan" to="/scan_raw"/>
+	  <rosparam file="$(find pmb2_lab_nav)/config/localization/amcl.yaml" command="load"/>
+	</node>
   </group>
   
-  <node pkg="amcl" type="amcl" name="amcl" machine="pmb2-5c">
-	<rosparam file="$(find pmb2_lab_nav)/config/localization/amcl.yaml" command="load"/>
-  </node>
+  <group unless="$(arg sim)">  
+    <param name="use_sim_time" value="false" />  
+    <machine name="pmb2-5c" address="10.68.0.1" user="root" env-loader="/home/pal/pmb2_UJA/scripts/env.sh" />
+    <node machine="pmb2-5c" name="map_server" pkg="map_server" type="map_server" args="$(find pmb2_lab_nav)/maps/lab_$(arg map_method).yaml" />
+    <node pkg="amcl" type="amcl" name="amcl" machine="pmb2-5c">
+	  <rosparam file="$(find pmb2_lab_nav)/config/localization/amcl.yaml" command="load"/>
+    </node>  
+  </group>
     
 </launch>

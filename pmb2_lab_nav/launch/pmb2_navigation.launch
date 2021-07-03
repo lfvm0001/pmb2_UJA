@@ -2,25 +2,25 @@
 
   <arg name="base_global_planner" default="global_planner/GlobalPlanner"/>
   <arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
+  <arg name="sim" default="false"/>
   
-  <param name="use_sim_time" value="false" />  
-  <machine name="pmb2-5c" address="10.68.0.1" user="root" env-loader="/home/pal/pmb2_UJA/scripts/env.sh" />
-    
-	
-  <node pkg="move_base" type="move_base" name="move_base" respawn="false" output="screen" machine="pmb2-5c">
-    
-    <remap from="odom" to="mobile_base_controller/odom"/>    
-    <remap from="cmd_vel" to="nav_vel"/>
-    
-    <param name="base_global_planner" value="$(arg base_global_planner)"/>
-    <param name="base_local_planner" value="$(arg base_local_planner)"/>
-	
-    <rosparam file="$(find pmb2_lab_nav)/config/navigation/planner.yaml" command="load"/>
-    <rosparam file="$(find pmb2_lab_nav)/config/navigation/recovery_behaviors.yaml" command="load"/>
+  <group if="$(arg sim)">
+    <include file="$(find pmb2_lab_nav)/launch/pmb2_navigation_sim.launch"/>
+  </group>
 
-    <rosparam file="$(find pmb2_lab_nav)/config/navigation/costmap_local.yaml" command="load"  />
-    <rosparam file="$(find pmb2_lab_nav)/config/navigation/costmap_global.yaml" command="load" />
-	
-  </node>
-
+  <group unless="$(arg sim)">  
+    <param name="use_sim_time" value="false" />  
+    <machine name="pmb2-5c" address="10.68.0.1" user="root" env-loader="/home/pal/pmb2_UJA/scripts/env.sh" />
+    <node pkg="move_base" type="move_base" name="move_base" respawn="false" output="screen" machine="pmb2-5c">
+      <remap from="odom" to="mobile_base_controller/odom"/>    
+      <remap from="cmd_vel" to="nav_vel"/>
+      <param name="base_global_planner" value="$(arg base_global_planner)"/>
+      <param name="base_local_planner" value="$(arg base_local_planner)"/>
+      <rosparam file="$(find pmb2_lab_nav)/config/navigation/planner.yaml" command="load"/>
+      <rosparam file="$(find pmb2_lab_nav)/config/navigation/recovery_behaviors.yaml" command="load"/>
+      <rosparam file="$(find pmb2_lab_nav)/config/navigation/costmap_local.yaml" command="load"  />
+      <rosparam file="$(find pmb2_lab_nav)/config/navigation/costmap_global.yaml" command="load" />
+    </node>
+  </group>  
+  
 </launch>

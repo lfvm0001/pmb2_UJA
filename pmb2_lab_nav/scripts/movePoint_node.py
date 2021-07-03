@@ -2,6 +2,7 @@
 
 import rospy
 import rospkg
+import rosnode
 import actionlib
 from pmb2_lab_nav.srv import move_service
 from actionlib_msgs.msg import GoalStatus
@@ -24,8 +25,8 @@ class movePoint_node():
             for line in f:
                 (key, val,name) = line.split()
                 self.goals[int(key)] = val
-                
-
+        
+        
         self.navClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         wait = self.navClient.wait_for_server(rospy.Duration(5.0))
 

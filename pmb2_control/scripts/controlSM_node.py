@@ -6,10 +6,14 @@ import smach
 import rospkg
 import rosnode
 import smach_ros
+import actionlib
 from std_msgs.msg import *
+from geometry_msgs.msg import *
 from pmb2_face.srv import talk_service
 from pmb2_face.srv import listen_service
 from pmb2_lab_nav.srv import move_service
+from actionlib_msgs.msg import GoalStatus
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 class state(smach.State):
     def __init__(self):
@@ -113,14 +117,62 @@ class init(smach.State):
         smach.State.__init__(self, outcomes = ['done','error'])
         
         self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10)
+        self.pose_pub = rospy.Publisher('initialpose', PoseWithCovarianceStamped, queue_size=10)
+        self.navInit = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         
     def execute(self, userdata):
-        if (len(rosnode.get_node_names())>1):
-            self.info_pub.publish("RUTINA INICIAL")
-            return ('done')
-        else:
-            return('error')
+        self.info_pub.publish("Inicializando...") 
+        
+        start_pose = PoseWithCovarianceStamped()
+        start_pose.header.frame_id = "map"
+        start_pose.header.stamp = rospy.Time.now()
+        start_pose.pose.pose.position.x = 0.0
+        start_pose.pose.pose.position.y = 0.0
+        start_pose.pose.pose.position.z = 0.0
 
+        start_pose.pose.pose.orientation.x = 0.0
+        start_pose.pose.pose.orientation.y = 0.0
+        start_pose.pose.pose.orientation.z = 0.0
+        start_pose.pose.pose.orientation.w = 0.99
+        
+        try:
+            self.pose_pub.publish(start_pose)
+            self.rotate()
+            return ('done')
+            
+        except:
+            return ('error')   
+
+    def rotate(self):
+        goal = MoveBaseGoal()
+        goal.target_pose.header.frame_id = "map"
+        goal.target_pose.header.stamp = rospy.Time.now()
+                
+        goal.target_pose.pose.position.x = 0
+        goal.target_pose.pose.position.y = 0
+        goal.target_pose.pose.position.z = 0
+        goal.target_pose.pose.orientation.x = 0
+        goal.target_pose.pose.orientation.y = 0
+        goal.target_pose.pose.orientation.z = -0.99
+        goal.target_pose.pose.orientation.w = 0.12
+                
+        self.navInit.send_goal(goal)
+        self.navInit.wait_for_result()
+                
+        if self.navInit.get_state() == 3:
+            goal.target_pose.pose.orientation.z = -0.79
+            goal.target_pose.pose.orientation.w = 0.61  
+
+            self.navInit.send_goal(goal)
+            self.navInit.wait_for_result()                
+        
+            if self.navInit.get_state() == 3:
+                goal.target_pose.pose.orientation.z = 0.0
+                goal.target_pose.pose.orientation.w = 0.99  
+
+                self.navInit.send_goal(goal)
+                self.navInit.wait_for_result()    
+   
 
 class welcome(smach.State):
     def __init__(self):
@@ -232,14 +284,7 @@ def controlSM_node():
                                  transitions={'succeeded':'final_succeeded',
                                               'failed':'final_failed'})                                              
 
-
-    sis = smach_ros.IntrospectionServer('server_name', sm_top, '/SM_ROOT')
-    sis.start()
-    
     outcome = sm_top.execute()
-    
-    rospy.spin()
-    sis.stop()
     
     
 if __name__ == '__main__':

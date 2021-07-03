@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <arg name="public_sim"   default="true"/>
+  <arg name="laser_model"  default="sick-571"/>
+  <arg name="rgbd_sensors"  default="false"/>
+
+  <arg name="planner"        default="base"/>
+  <arg name="global_planner" default="global_planner"/>
+  <arg name="local_planner"  default="$(eval 'teb' if arg('public_sim') else 'pal')"/> 
+  <arg name="localization"   default="amcl"/>
+  <arg name="octomap"        default="false"/>
+
+  <include file="$(find pmb2_lab_nav)/launch/pmb2_simulation.launch">
+    <arg name="state"          value="localization"/>
+    <arg name="planner"        value="$(arg planner)"/>
+    <arg name="global_planner" value="$(arg global_planner)"/>
+    <arg name="local_planner"  value="$(arg local_planner)"/>
+    <arg name="localization"   value="$(arg localization)"/>
+    <arg name="octomap"        value="$(arg octomap)"/>
+    <arg name="public_sim"     value="$(arg public_sim)"/>
+    <arg name="laser_model"    value="$(arg laser_model)"/>
+    <arg name="rgbd_sensors" value="$(arg rgbd_sensors)"/>
+  </include>
+
+
+</launch>
