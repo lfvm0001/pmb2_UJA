@@ -44,7 +44,6 @@ class state(smach.State):
                 del userdata.names_in[list(userdata.names_in)[0]]
             
             else:
-                self.tts_pub.publish(" ")
                 response="Deseas ir a ver "+ userdata.names_in[list(userdata.names_in)[0]] + " o " +userdata.names_in[list(userdata.names_in)[1]]
                 self.info_pub.publish(response) 
                 self.tts_pub.publish(response) 
@@ -71,8 +70,9 @@ class nav(smach.State):
         self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10) 
 
     def execute(self, userdata):
+        self.info_pub.publish("Iniciando trayectoria hacia el punto indicado...")
         resultMove = self.move_srv("move",userdata.point_in)
-        self.info_pub.publish("Iniciando trayectoria hacia el punto indicado...") 
+ 
         
         if resultMove.move_resp == 0:
             self.info_pub.publish("Robot en posicion") 
@@ -89,9 +89,9 @@ class talk(smach.State):
                                  input_keys = ['point_in','final_in'])
         
         self.talk_srv = rospy.ServiceProxy('talk_srv', talk_service)
+        self.face_pub = rospy.Publisher('face_action', String, queue_size=10)
         self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10) 
         self.navInit = actionlib.SimpleActionClient('move_base', MoveBaseAction)
-
 
     def execute(self, userdata):
         resultTalk = self.talk_srv("talk", userdata.point_in)
@@ -100,6 +100,11 @@ class talk(smach.State):
             if userdata.final_in == 1:
                 self.info_pub.publish("Gracias por tu atencion") 
                 resultTalk = self.talk_srv("talk", 100)
+                
+                if resultTalk.talk_resp == 0:
+                    self.face_pub.publish("smile")
+                    time.sleep(2)
+                    self.face_pub.publish("idle")
                 
                 goal = MoveBaseGoal()
                 goal.target_pose.header.frame_id = "map"
@@ -117,19 +122,6 @@ class talk(smach.State):
                 self.navInit.wait_for_result()
                 
                 if self.navInit.get_state() == 3:
-                    os.system("rosnode kill aiml_node")
-                    os.system("rosnode kill amcl")
-                    os.system("rosnode kill check_node")
-                    os.system("rosnode kill face_node")
-                    os.system("rosnode kill map_server")
-                    os.system("rosnode kill messages_node")
-                    os.system("rosnode kill movePoint_node")
-                    os.system("rosnode kill move_base")
-                    os.system("rosnode kill speech2text_node")
-                    os.system("rosnode kill talk_node")
-                    os.system("rosnode kill text2speech_node ")
-                    time.sleep(2)
-                    
                     return('final')
                 else:
                     return('error')
@@ -210,8 +202,8 @@ class welcome(smach.State):
         self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10)
     
     def execute(self, userdata):
-        resultTalk = self.talk_srv("talk", 0)
         self.info_pub.publish("Bienvenido") 
+        resultTalk = self.talk_srv("talk", 0)
         
         if resultTalk.talk_resp == 0:
             resultListen = self.listen_srv("conversation")
@@ -234,8 +226,8 @@ class ready(smach.State):
         resultTalk = self.talk_srv("talk", 99)
         if resultTalk.talk_resp == 0:
             resultListen = self.listen_srv("listen")
-            time.sleep(3)
-            if resultListen.listen_resp.lower() == "si":
+            time.sleep(2)
+            if "si" in resultListen.listen_resp.lower():
                 resultTalk = self.talk_srv("talk", 98)
                 if resultTalk.talk_resp == 0:
                     return ('done')
@@ -313,10 +305,21 @@ def controlSM_node():
         smach.StateMachine.add('SUB', sm,
                                  transitions={'succeeded':'final_succeeded',
                                               'failed':'final_failed'})                                              
-
+   
     outcome = sm_top.execute()
+    os.system("rosnode kill aiml_node")
+    os.system("rosnode kill amcl")
+    os.system("rosnode kill check_node")
+    os.system("rosnode kill face_node")
+    os.system("rosnode kill map_server")
+    os.system("rosnode kill messages_node")
+    os.system("rosnode kill movePoint_node")
+    os.system("rosnode kill move_base")
+    os.system("rosnode kill speech2text_node")
+    os.system("rosnode kill talk_node")
+    os.system("rosnode kill text2speech_node ")
+    time.sleep(2)
     exit()
-    
     
 if __name__ == '__main__':
     try:

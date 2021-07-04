@@ -2,6 +2,7 @@
 
 import os
 import ttk
+import time
 import rospy
 import actionlib
 from Tkinter import *
@@ -33,7 +34,9 @@ class GUI():
     
     def endProgram(self):
         try:
+            time.sleep(1)
             resultTalk = self.talk_srv("talk", 100)
+            os.system("rosnode kill controlSM_node")
         except:
             pass
         
@@ -58,7 +61,6 @@ class GUI():
             os.system("rosnode kill check_node")
             os.system("rosnode kill face_node")
             os.system("rosnode kill map_server")
-            os.system("rosnode kill controlSM_node")
             os.system("rosnode kill movePoint_node")
             os.system("rosnode kill move_base")
             os.system("rosnode kill speech2text_node")

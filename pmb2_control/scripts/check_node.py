@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 import os
+import time
 import rospy
 import rosnode
+import roslaunch
 
 
 class check_node():
@@ -21,6 +23,7 @@ class check_node():
             if (("/aiml_node" in nodes) and ("/amcl" in nodes) and ("/face_node" in nodes) and ("/map_server" in nodes) and 
             ("/move_base" in nodes) and ("/speech2text_node" in nodes) and ("/talk_node" in nodes) and ("/text2speech_node" in nodes)):
                 
+                time.sleep(10)
                 os.system('roslaunch pmb2_control load_nodes.launch')
                 done=True
                 

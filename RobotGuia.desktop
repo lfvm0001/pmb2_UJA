@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=RobotGuia
+Comment=Robot guia UJA
+Exec=bash -c "source /opt/ros/melodic/setup.bash; source /home/tini/Documents/TFM/pmb2_robot/devel/setup.bash; /home/tini/Documents/TFM/pmb2_robot/src/pmb2_sim/pmb2_UJA/scripts/program/mainProgram.sh"
+Icon=/home/tini/Documents/TFM/pmb2_robot/src/pmb2_sim/pmb2_UJA/scripts/program/icon.png
+Terminal=true
+Type=Application
+Categories=Utility;Application;

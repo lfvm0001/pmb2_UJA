@@ -10,7 +10,7 @@ from std_msgs.msg import *
 
 global my_group
 
-FPS = 20
+FPS = 25
 SIZE = WIDTH, HEIGHT = 795, 415
 PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 
