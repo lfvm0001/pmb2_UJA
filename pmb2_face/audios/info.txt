@@ -1,1 +1,6 @@
 0 Audio de Bienvenida
+98 Audio indicandole al usuario que ya va a comenzar
+99 Audio preguntando al usuario si esta listo
+100 Audio de despedida
+
+1-97 Audios para las diferentes posiciones definidas en el archivo de configuracion que se encuentra en el paquete pmb2_control

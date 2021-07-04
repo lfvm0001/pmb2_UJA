@@ -30,8 +30,11 @@ class text2speech_node():
     
     
     def get_audio(self,data): 
-        text = data.data 
+        text = data.data
         
+        if not text:
+            text="Vale!"
+            
         try:
             response = self.polly.synthesize_speech(Text=text, VoiceId='Lucia', OutputFormat='ogg_vorbis')
             body = response['AudioStream'].read()

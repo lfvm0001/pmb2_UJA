@@ -1,6 +1,7 @@
 <launch>
 
-  <node pkg="pmb2_lab_nav" type="movePoint_node.py" name="movePoint_node" respawn="true" output="screen" />
-  <node pkg="pmb2_control" type="controlSM_node.py" name="controlSM_node" respawn="true" output="screen" />
+  <node pkg="pmb2_control" type="messages_node.py" name="messages_node" respawn="false" output="screen" />
+  <node pkg="pmb2_lab_nav" type="movePoint_node.py" name="movePoint_node" respawn="false" output="screen" />
+  <node pkg="pmb2_control" type="controlSM_node.py" name="controlSM_node" respawn="false" output="screen" />
   
 </launch>

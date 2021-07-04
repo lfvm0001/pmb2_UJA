@@ -17,6 +17,7 @@ class speech2text_node():
         rospy.loginfo("Starting speech2text Node") 
         
         self.text_pub = rospy.Publisher('stt', String,queue_size=10) 
+        self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10)
         rospy.Service('listen_srv', listen_service, self.get_text) 
         rospy.spin() 
     
@@ -27,6 +28,7 @@ class speech2text_node():
 
         stream = p.open(rate=16000, format=p.get_format_from_width(2), channels=1, input=True, input_device_index=0)
         rospy.loginfo("Hearing...")
+        self.info_pub.publish("Escuchando") 
 
         frames = []
 
@@ -59,6 +61,7 @@ class speech2text_node():
                     self.text_pub.publish(text)
 
                 rospy.loginfo("Human said: "+text)
+                self.info_pub.publish("Has dicho: "+text) 
                 os.remove(sound)
                 return (text)
                     

@@ -1,18 +1,18 @@
 <launch>
   <arg name="sim" default="false"/>
 
-  <node pkg="pmb2_face" type="face_node.py" name="face_node" respawn="true" output="screen" />
-  <node pkg="pmb2_face" type="talk_node.py" name="talk_node" respawn="true" output="screen" />
+  <node pkg="pmb2_face" type="face_node.py" name="face_node" respawn="false" output="screen" />
+  <node pkg="pmb2_face" type="talk_node.py" name="talk_node" respawn="false" output="screen" />
   
   <group if="$(arg sim)">
-    <node pkg="pmb2_face" type="speech2text_node_sim.py" name="speech2text_node" respawn="true" output="screen" />
+    <node pkg="pmb2_face" type="speech2text_node_sim.py" name="speech2text_node" respawn="false" output="screen" />
   </group>
   
   <group unless="$(arg sim)">  
-    <node pkg="pmb2_face" type="speech2text_node.py" name="speech2text_node" respawn="true" output="screen" />
+    <node pkg="pmb2_face" type="speech2text_node.py" name="speech2text_node" respawn="false" output="screen" />
   </group>
   
-  <node pkg="pmb2_face" type="aiml_node.py" name="aiml_node" respawn="true" output="screen" />
-  <node pkg="pmb2_face" type="text2speech_node.py" name="text2speech_node" respawn="true" output="screen" />
+  <node pkg="pmb2_face" type="aiml_node.py" name="aiml_node" respawn="false" output="screen" />
+  <node pkg="pmb2_face" type="text2speech_node.py" name="text2speech_node" respawn="false" output="screen" />
 
 </launch>

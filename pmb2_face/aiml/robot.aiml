@@ -6,6 +6,7 @@
 			<random>
 				<li> Hola <set name = "username"> <star/>! </set> </li>
 				<li> Mucho gusto en conocerte <set name = "username"> <star/>! </set> </li>
+				<li> Hola <set name = "username"> <star/>! </set> me alegro que estés aquí</li>
 			</random>
 		</template> 
 	</category> 
@@ -47,6 +48,20 @@
 	
 	<category> 
 		<pattern> HOLA ME LLAMO * </pattern> 
+		<template> 
+			<srai> MI NOMBRE ES <star/> </srai>
+		</template> 
+	</category>
+	
+    <category> 
+		<pattern> NOMBRE ES * </pattern> 
+		<template> 
+			<srai> MI NOMBRE ES <star/> </srai>
+		</template> 
+	</category>
+	
+	<category> 
+		<pattern> NOMBRE * </pattern> 
 		<template> 
 			<srai> MI NOMBRE ES <star/> </srai>
 		</template> 

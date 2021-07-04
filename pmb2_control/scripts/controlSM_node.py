@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import time
 import rospy
 import smach
@@ -15,6 +16,7 @@ from pmb2_lab_nav.srv import move_service
 from actionlib_msgs.msg import GoalStatus
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
+
 class state(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes = ['done','error'],
@@ -22,7 +24,8 @@ class state(smach.State):
                                 output_keys = ['point_out','final_out','cont_out','names_out'])
 
         self.tts_pub = rospy.Publisher('tts', String, queue_size=10) 
-        self.listen_srv = rospy.ServiceProxy('listen_srv', listen_service)        
+        self.listen_srv = rospy.ServiceProxy('listen_srv', listen_service) 
+        self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10)        
     
     def execute(self, userdata):
         if len(userdata.names_in) == 1:
@@ -31,9 +34,9 @@ class state(smach.State):
 
         else:
             if userdata.cont_in == 0:
-                response="Primer punto"
+                response="Vamos al primer punto"
+                self.info_pub.publish(response) 
                 self.tts_pub.publish(response) 
-
 
                 userdata.point_out = int(list(userdata.names_in)[0])
                 userdata.cont_out = 1
@@ -42,13 +45,14 @@ class state(smach.State):
             
             else:
                 self.tts_pub.publish(" ")
-                response="Deseas ir a "+ userdata.names_in[list(userdata.names_in)[0]] + " o a " +userdata.names_in[list(userdata.names_in)[1]]
+                response="Deseas ir a ver "+ userdata.names_in[list(userdata.names_in)[0]] + " o " +userdata.names_in[list(userdata.names_in)[1]]
+                self.info_pub.publish(response) 
                 self.tts_pub.publish(response) 
                 time.sleep(3)
                 
                 resultListen = self.listen_srv("listen")
                 
-                if resultListen.listen_resp == userdata.names_in[list(userdata.names_in)[1]]:
+                if resultListen.listen_resp.lower() == userdata.names_in[list(userdata.names_in)[1]].lower():
                     userdata.point_out = int(list(userdata.names_in)[1])
                     del userdata.names_in[list(userdata.names_in)[1]]
                 else:
@@ -64,11 +68,14 @@ class nav(smach.State):
                                  input_keys = ['point_in'])
 
         self.move_srv = rospy.ServiceProxy('move_srv', move_service)
+        self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10) 
 
     def execute(self, userdata):
         resultMove = self.move_srv("move",userdata.point_in)
+        self.info_pub.publish("Iniciando trayectoria hacia el punto indicado...") 
         
         if resultMove.move_resp == 0:
+            self.info_pub.publish("Robot en posicion") 
             return ('done')
         elif resultMove.move_resp == 1:
             return('error')  
@@ -82,32 +89,52 @@ class talk(smach.State):
                                  input_keys = ['point_in','final_in'])
         
         self.talk_srv = rospy.ServiceProxy('talk_srv', talk_service)
-                
+        self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10) 
+        self.navInit = actionlib.SimpleActionClient('move_base', MoveBaseAction)
+
+
     def execute(self, userdata):
         resultTalk = self.talk_srv("talk", userdata.point_in)
         
         if resultTalk.talk_resp == 0:
             if userdata.final_in == 1:
+                self.info_pub.publish("Gracias por tu atencion") 
                 resultTalk = self.talk_srv("talk", 100)
-                return('final')
+                
+                goal = MoveBaseGoal()
+                goal.target_pose.header.frame_id = "map"
+                goal.target_pose.header.stamp = rospy.Time.now()
+                
+                goal.target_pose.pose.position.x = 0
+                goal.target_pose.pose.position.y = 0
+                goal.target_pose.pose.position.z = 0
+                goal.target_pose.pose.orientation.x = 0
+                goal.target_pose.pose.orientation.y = 0
+                goal.target_pose.pose.orientation.z = 0
+                goal.target_pose.pose.orientation.w = 0.99
+                
+                self.navInit.send_goal(goal)
+                self.navInit.wait_for_result()
+                
+                if self.navInit.get_state() == 3:
+                    os.system("rosnode kill aiml_node")
+                    os.system("rosnode kill amcl")
+                    os.system("rosnode kill check_node")
+                    os.system("rosnode kill face_node")
+                    os.system("rosnode kill map_server")
+                    os.system("rosnode kill messages_node")
+                    os.system("rosnode kill movePoint_node")
+                    os.system("rosnode kill move_base")
+                    os.system("rosnode kill speech2text_node")
+                    os.system("rosnode kill talk_node")
+                    os.system("rosnode kill text2speech_node ")
+                    time.sleep(2)
+                    
+                    return('final')
+                else:
+                    return('error')
             else:
                 return ('done')
-                
-        else:
-            return ('error')
- 
-    
-class final(smach.State):
-    def __init__(self):
-        smach.State.__init__(self, outcomes = ['done','error'])
-        
-        self.talk_srv = rospy.ServiceProxy('talk_srv', talk_service)
-        
-    def execute(self):
-        resultTalk = self.talk_srv("talk", 0)
-        
-        if resultTalk.talk_resp == 0:
-            return ('done')  
         else:
             return ('error')
 
@@ -180,9 +207,12 @@ class welcome(smach.State):
 
         self.talk_srv = rospy.ServiceProxy('talk_srv', talk_service)
         self.listen_srv = rospy.ServiceProxy('listen_srv', listen_service) 
+        self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10)
     
     def execute(self, userdata):
         resultTalk = self.talk_srv("talk", 0)
+        self.info_pub.publish("Bienvenido") 
+        
         if resultTalk.talk_resp == 0:
             resultListen = self.listen_srv("conversation")
             time.sleep(5)
@@ -197,24 +227,25 @@ class ready(smach.State):
         
         self.talk_srv = rospy.ServiceProxy('talk_srv', talk_service)
         self.listen_srv = rospy.ServiceProxy('listen_srv', listen_service) 
+        self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10)
     
     def execute(self, userdata):
+        self.info_pub.publish("Estas listo para iniciar...") 
         resultTalk = self.talk_srv("talk", 99)
         if resultTalk.talk_resp == 0:
             resultListen = self.listen_srv("listen")
             time.sleep(3)
-            if resultListen.listen_resp == "si":
+            if resultListen.listen_resp.lower() == "si":
                 resultTalk = self.talk_srv("talk", 98)
                 if resultTalk.talk_resp == 0:
                     return ('done')
                 else:
-                    time.sleep(5)
                     return('error')
             else:
-                time.sleep(5)
+                time.sleep(3)
                 return('error')
         else:
-            time.sleep(5)
+            time.sleep(3)
             return('error')
 
   
@@ -239,7 +270,6 @@ def controlSM_node():
                                 transitions = {'done':'SUB',
                                                'error':'READY'})  
                                                
-
     
         rospack = rospkg.RosPack()
         configPath = rospack.get_path("pmb2_control") + "/config/pointsConfig.txt"
@@ -285,6 +315,7 @@ def controlSM_node():
                                               'failed':'final_failed'})                                              
 
     outcome = sm_top.execute()
+    exit()
     
     
 if __name__ == '__main__':
