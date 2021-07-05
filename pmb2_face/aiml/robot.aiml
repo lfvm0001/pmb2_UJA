@@ -66,25 +66,5 @@
 			<srai> MI NOMBRE ES <star/> </srai>
 		</template> 
 	</category>
-
-
-	<category> 
-		<pattern> ¿CÓMO ESTÁS? </pattern> 
-		<template> 
-			Muy bien y ¿tú <get name = "username"/> ?
-		</template> 
-	</category>
-	
-	<category>
-		<pattern> BIEN </pattern>
-		<that> Muy bien y ¿tú <get name = "username"/> ? </that>
-		<template> Me alegro que estés bien </template>
-   </category>
-   
-   	<category>
-		<pattern> MAL </pattern>
-		<that> Muy bien y ¿tú <get name = "username"/> ? </that>
-		<template> Lo siento, espero que te sientas mejor </template>
-   </category>
  
 </aiml> 

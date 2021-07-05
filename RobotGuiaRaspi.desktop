@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=RobotGuia
+Comment=Robot guia UJA
+Exec=bash -c "source /opt/ros/kinetic/setup.bash; source /home/pi/Documents/PMB2/pmb2_UJA/devel/setup.bash; /home/pi/Documents/PMB2/pmb2_UJA/src/pmb2_UJA/scripts/program/mainProgramRaspi.sh"
+Icon=/home/pi/Documents/PMB2/pmb2_UJA/src/pmb2_UJA/scripts/program/icon.png
+Terminal=true
+Type=Application
+Categories=Utility;Application;
+Name[en_US]=RobotGuiaRaspi.desktop

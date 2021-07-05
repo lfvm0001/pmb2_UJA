@@ -66,6 +66,8 @@ class GUI():
             os.system("rosnode kill speech2text_node")
             os.system("rosnode kill talk_node")
             os.system("rosnode kill text2speech_node ")
+           
+            self.window.destroy()
             exit()
     
     def create(self):
@@ -74,15 +76,15 @@ class GUI():
         self.screen_width = self.window.winfo_screenwidth()
         self.screen_height = self.window.winfo_screenheight()
         
-        self.window_height = 80  
+        self.window_height = 40  
         self.window_width = 157  
         
         self.y_cordinate = int((self.screen_height) - (self.window_height/2))
-        self.window.geometry("{}x{}+{}+{}".format(self.screen_width, self.window_height, 0, self.y_cordinate))
+        self.window.geometry("{}x{}+{}+{}".format(self.screen_width, 85, 0, 0))
         
         #Componentes 
-        self.autoMsj_text = Text(self.window, height=3, width=self.window_width-15)
-        self.autoMsj_text.grid(row=0, column=0, padx=10, pady=10)
+        self.autoMsj_text = Text(self.window, height=3, width=83)
+        self.autoMsj_text.grid(row=0, column=0, padx=1, pady=10)
         self.autoMsj_text.insert(INSERT, "ROBOT GUIA \n")
         self.autoMsj_text.see(END)
         
@@ -91,7 +93,7 @@ class GUI():
         self.autoMsj_text['yscrollcommand'] = scroll.set
         
         self.exit_buttom = Button(self.window, text ="Salir", command = self.endProgram, width=10)
-        self.exit_buttom.grid(row=0, column=2, padx=5, pady=5)
+        self.exit_buttom.grid(row=0, column=2, padx=8, pady=5)
     
     def __enter__(self):
         print("Inicializando programa")
