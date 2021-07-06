@@ -10,7 +10,7 @@
 
   <group unless="$(arg sim)">  
     <param name="use_sim_time" value="false" />  
-    <machine name="pmb2-5c" address="10.68.0.1" user="root" env-loader="/home/pal/pmb2_UJA/scripts/env.sh" />
+    <machine name="pmb2-5c" address="10.68.0.1" user="root" password="palroot" env-loader="/home/pal/pmb2_UJA/scripts/env.sh" />
     <node pkg="move_base" type="move_base" name="move_base" respawn="false" output="screen" machine="pmb2-5c">
       <remap from="odom" to="mobile_base_controller/odom"/>    
       <remap from="cmd_vel" to="nav_vel"/>

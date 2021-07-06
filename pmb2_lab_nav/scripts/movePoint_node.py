@@ -28,7 +28,7 @@ class movePoint_node():
         
         
         self.navClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
-        wait = self.navClient.wait_for_server(rospy.Duration(5.0))
+        wait = self.navClient.wait_for_server(rospy.Duration(20.0))
 
         if not wait:
             rospy.loginfo("move_base server not available!")

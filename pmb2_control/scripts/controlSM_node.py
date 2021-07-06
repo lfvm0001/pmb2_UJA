@@ -110,13 +110,13 @@ class talk(smach.State):
                 goal.target_pose.header.frame_id = "map"
                 goal.target_pose.header.stamp = rospy.Time.now()
                 
-                goal.target_pose.pose.position.x = 0
-                goal.target_pose.pose.position.y = 0
-                goal.target_pose.pose.position.z = 0
-                goal.target_pose.pose.orientation.x = 0
-                goal.target_pose.pose.orientation.y = 0
-                goal.target_pose.pose.orientation.z = 0
-                goal.target_pose.pose.orientation.w = 0.99
+                goal.target_pose.pose.position.x = 0.29
+                goal.target_pose.pose.position.y = -5.01
+                goal.target_pose.pose.position.z = 0.0
+                goal.target_pose.pose.orientation.x = 0.0
+                goal.target_pose.pose.orientation.y = 0.0
+                goal.target_pose.pose.orientation.z = 0.99
+                goal.target_pose.pose.orientation.w = 0.09
                 
                 self.navInit.send_goal(goal)
                 self.navInit.wait_for_result()
@@ -145,14 +145,14 @@ class init(smach.State):
         start_pose = PoseWithCovarianceStamped()
         start_pose.header.frame_id = "map"
         start_pose.header.stamp = rospy.Time.now()
-        start_pose.pose.pose.position.x = 0.0
-        start_pose.pose.pose.position.y = 0.0
+        start_pose.pose.pose.position.x = 0.29
+        start_pose.pose.pose.position.y = -5.01
         start_pose.pose.pose.position.z = 0.0
 
         start_pose.pose.pose.orientation.x = 0.0
         start_pose.pose.pose.orientation.y = 0.0
-        start_pose.pose.pose.orientation.z = 0.0
-        start_pose.pose.pose.orientation.w = 0.99
+        start_pose.pose.pose.orientation.z = 0.99
+        start_pose.pose.pose.orientation.w = 0.09
         
         try:
             self.pose_pub.publish(start_pose)
@@ -167,11 +167,11 @@ class init(smach.State):
         goal.target_pose.header.frame_id = "map"
         goal.target_pose.header.stamp = rospy.Time.now()
                 
-        goal.target_pose.pose.position.x = 0
-        goal.target_pose.pose.position.y = 0
-        goal.target_pose.pose.position.z = 0
-        goal.target_pose.pose.orientation.x = 0
-        goal.target_pose.pose.orientation.y = 0
+        goal.target_pose.pose.position.x = 0.29
+        goal.target_pose.pose.position.y = -5.01
+        goal.target_pose.pose.position.z = 0.0
+        goal.target_pose.pose.orientation.x = 0.0
+        goal.target_pose.pose.orientation.y = 0.0
         goal.target_pose.pose.orientation.z = -0.99
         goal.target_pose.pose.orientation.w = 0.12
                 
@@ -186,8 +186,8 @@ class init(smach.State):
             self.navInit.wait_for_result()                
         
             if self.navInit.get_state() == 3:
-                goal.target_pose.pose.orientation.z = 0.0
-                goal.target_pose.pose.orientation.w = 0.99  
+                goal.target_pose.pose.orientation.z = 0.99
+                goal.target_pose.pose.orientation.w = 0.09  
 
                 self.navInit.send_goal(goal)
                 self.navInit.wait_for_result()    
