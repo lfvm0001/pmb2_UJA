@@ -1,0 +1,38 @@
+Pasos:
+	1. Conectar la raspberry pi al robot mediante los cables usb y ehternet
+	
+	2. Encender el robot y esperar su inicializacion 
+	
+	3. Se puede observar si el robot encendio correctamente conectandose a la red generada y mirando la pagina web:
+		red: rlan constraseña: palrobotics web: https://control:8080
+		
+	4. Conectarse al robot por medio de shh ya sea con la raspberry u ordenador externo y ejecutar (usuario: root contraseña: palroot):
+		cd /home/pal/pmb2_UJA/scripts
+		. initNodes.sh 
+		
+	5. Verificar que la raspberry tenga conexion wifi y ademas que este conectada a la red del robot mediante ethernet con la ip:10.68.0.128 (comando ifconfig)
+	
+	6. Colocar el robot en la posicion inicial, cerca de la puerta del laboratorio. Se puede con el mando joystick o desde la consola del robot 
+	   (que se puede acceder con ordenador externo mediante shh), ejecutando:
+			rosrun key_teleop key_teleop.py
+			
+	7. Ejecutar en la raspberry:
+		roslaunch pmb2_control pmb2_program.launch
+	
+
+
+Si se desean agregar mas puntos:
+	1. Modificar el archivo pmb2_control/config/pointsConfig.txt con los puntos necesarios en la raspberry
+	2. Agregar los audios /pmb2_face/audios/ en la raspberry 
+		Los audios se graban utilizando Amazon Polly con la voz estandar en español de Lucia
+
+Si se desea realizar recorrido en otro entorno:
+	1. Crear el mapa y transferirlo al robot en la direccion /home/pal/pmb2_UJA/src/pmb2_lab_nav/maps/ con el nombre lab_gmapping.yaml
+	2. Obtener los puntos deseados en usando rviz y leyendo topicos (puntos deseados y posicion inicial)
+	3. Añadir los puntos deseados al archivo pmb2_control/config/pointsConfig.txt y los audios /pmb2_face/audios/
+	4. Añadir la posicion inicial en el script de maquina de estados en la raspberry (/pmb2_control/scripts/controlSM_node.py) en los estados:
+		TALK, INIT, ROTATE (modificar x,y,z nada mas)
+	5. Añadir la posicion inicial al script de mensajes en la raspberry (/pmb2_control/scripts/messages_node.py) en la funcion endProgram
+	
+		
+		
