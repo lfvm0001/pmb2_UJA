@@ -29,6 +29,7 @@ class state(smach.State):
     
     def execute(self, userdata):
         if len(userdata.names_in) == 1:
+            self.tts_pub.publish(" Ahora vamos al ultimo punto ") 
             userdata.point_out = int(list(userdata.names_in)[0])
             userdata.final_out = 1
 
@@ -50,7 +51,8 @@ class state(smach.State):
                 time.sleep(3)
                 
                 resultListen = self.listen_srv("listen")
-                
+                self.tts_pub.publish("Vale, sigueme") 
+
                 if resultListen.listen_resp.lower() == userdata.names_in[list(userdata.names_in)[1]].lower():
                     userdata.point_out = int(list(userdata.names_in)[1])
                     del userdata.names_in[list(userdata.names_in)[1]]
@@ -72,7 +74,6 @@ class nav(smach.State):
     def execute(self, userdata):
         self.info_pub.publish("Iniciando trayectoria hacia el punto indicado...")
         resultMove = self.move_srv("move",userdata.point_in)
- 
         
         if resultMove.move_resp == 0:
             self.info_pub.publish("Robot en posicion") 
@@ -129,7 +130,17 @@ class talk(smach.State):
                 return ('done')
         else:
             return ('error')
-
+            
+class pre(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes = ['done'])
+        
+        self.info_pub = rospy.Publisher('info_msgs', String, queue_size=10)
+    def execute(self, userdata):
+        self.info_pub.publish("Inicializando...") 
+        time.sleep(2)
+        return('done')
+        
     
 class init(smach.State):
     def __init__(self):
@@ -250,6 +261,9 @@ def controlSM_node():
 
     with sm_top:
    
+        smach.StateMachine.add('PRE', pre(),
+                                transitions = {'done':'INIT'})
+        
         smach.StateMachine.add('INIT', init(),
                                 transitions = {'done':'WELCOME',
                                                'error':'INIT'})

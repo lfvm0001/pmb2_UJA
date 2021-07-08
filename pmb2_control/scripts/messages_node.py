@@ -44,13 +44,13 @@ class GUI():
         goal.target_pose.header.frame_id = "map"
         goal.target_pose.header.stamp = rospy.Time.now()
                 
-        goal.target_pose.pose.position.x = 0
-        goal.target_pose.pose.position.y = 0
+        goal.target_pose.pose.position.x = 0.29
+        goal.target_pose.pose.position.y = -5.01
         goal.target_pose.pose.position.z = 0
         goal.target_pose.pose.orientation.x = 0
         goal.target_pose.pose.orientation.y = 0
-        goal.target_pose.pose.orientation.z = 0
-        goal.target_pose.pose.orientation.w = 0.99
+        goal.target_pose.pose.orientation.z = 0.99
+        goal.target_pose.pose.orientation.w = 0.09
                 
         self.navInit.send_goal(goal)
         self.navInit.wait_for_result()
